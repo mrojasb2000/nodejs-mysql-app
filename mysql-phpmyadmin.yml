@@ -1,0 +1,36 @@
+version: '3.0'
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: database-develop
+    volumes:
+      - database-develop:/var/lib/mysql
+      - ./database:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: lemontech
+      TZ: "America/Santiago"
+    ports:
+      - 3309:3306
+    networks:
+      webapp:
+        ipv4_address: 26.0.0.2
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-develop
+    environment:
+      PMA_HOST: mysql
+    links:
+      - "mysql:mysql"
+    ports:
+      - 8080:80
+    networks:
+      webapp:
+        ipv4_address: 26.0.0.3
+volumes:
+  database-develop:
+networks:
+  webapp:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 26.0.0.0/24
