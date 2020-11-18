@@ -27,7 +27,8 @@ router.get('/delete/:id', async (req, res) => {
     const { id } = req.params;
     const { affectedRows, serverStatus } = await pool.query('DELETE FROM links WHERE id = ?', [id]);
     if (serverStatus === 2 && affectedRows === 1) {
-        console.log(`${id} was removed`);
+        console.log(`Link ${id} was removed`);
+        req.flash('success', 'Links revomed successfully');
         res.redirect('/links');
     }
 });
@@ -48,7 +49,8 @@ router.post('/edit/:id', async (req, res) => {
     };
     const { serverStatus, affectedRows } = await pool.query('UPDATE links SET ? WHERE id = ?', [newLink, id]);
     if (serverStatus === 2 && affectedRows === 1) {
-        console.log(`${id} was updated`);
+        console.log(`Link ${id} was updated`);
+        req.flash('success', 'Links updated successfully');
         res.redirect('/links');
     }
 });
